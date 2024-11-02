@@ -5,13 +5,13 @@
 
 </script>
 
-<div class="grid">
+<div class="grid mx-3">
 	<form action="?/login" method="POST">
 		<h1>Registro</h1>
 
 		<div>
 			<label for="email">Escribe tu email</label>
-			<input id="email" name="email" type="email"  required />
+			<input id="email" name="email" type="text"  required />
 		</div>
 
 		<div>
@@ -19,8 +19,8 @@
 			<input id="password" name="password" type="password" required />
 		</div>
 
-		{#if form?.invalid}
-			<p class="error">Se requiere nombre de usuario y contraseña</p>
+		{#if form?.mensaje }
+			<p class="error">{form.mensaje}</p>
 		{/if}
 
 		{#if form?.credentials}
@@ -32,7 +32,6 @@
 </div>
 
 
-<button onclick={()=> alert("hola")}>haga click</button>
 
 
 
@@ -53,7 +52,8 @@
 
 
 
-c
+
+
 
 <style>
 	.grid {
@@ -113,7 +113,7 @@ c
 		font-size: 0.8rem; /* Tamaño de fuente más pequeño */
 	}
 	/*   .error {
-    color: #ff6b6b; /* Color rojo para mensajes de error 
-  } 
+    color: #ff6b6b; /* Color rojo para mensajes de error
+  }
 */
 </style>

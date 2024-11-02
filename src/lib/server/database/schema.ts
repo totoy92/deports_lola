@@ -2,7 +2,6 @@ import { int, text, sqliteTable, primaryKey } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
 
 
-
 export const users = sqliteTable('users', {
 	id: int().primaryKey({ autoIncrement: true }),
 	nombre: text().notNull(),
@@ -12,11 +11,15 @@ export const users = sqliteTable('users', {
 	tipoDoc: text().notNull(),
 	numeroDoc: text().notNull().unique(),
 	nacimiento: int().notNull(),
-	rol: text().notNull(),
+	rol: text({enum:["admin","user"]}).notNull(),
 	creado: int().default(Date.now() * 1000),
 	passwordHash: text(),
 	tokenAuth: text()
 });
+
+export type User = typeof users.$inferSelect
+export type Users = typeof users.$inferSelect[]
+export type UserInsert = typeof users.$inferInsert
 
 export const relationUsers = relations(users, ({ many }) => ({
 	usuariosATemas: many(usuariostemas),

@@ -1,10 +1,10 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { fail, redirect } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
-
-import { db } from '$lib/server/database/client';
-import { usuarios } from '$lib/server/database/tables';
-import { and, eq } from 'drizzle-orm';
+import { credentials } from '$lib/types/appTypes';
+import { db } from '$lib/server/database/index';
+import { users } from '$lib/server/database/schema';
+import { eq } from 'drizzle-orm';
 
 
 export const load = async () => {
@@ -15,46 +15,33 @@ export const load = async () => {
 export const actions = {
 
 
-  register: async ({ request }: RequestEvent) => {
+  register: async ({ request, cookies }: RequestEvent) => {
     const data = Object.fromEntries(await request.formData())
+    const validate = credentials.safeParse(data);
+		if (!validate.success) {
+			return fail(400, { mensaje: validate.error.errors[0].message });
+		}
 
-    if (
-      typeof data.email !== 'string' ||
-      typeof data.password !== 'string' ||
-      typeof data.username !== 'string' ||
-      typeof data.edad !== 'string' ||
-      !data.email ||
-      !data.password ||
-      !data.username ||
-      !data.edad
-    ) {
-      return fail(400, { invalid: true })
-    }
+		if(String(data.password) !== String(data.password1)) return fail(400, { mensaje: 'Las contraseñas no coinciden' })
 
-    const user = await db.select().from(usuarios).where(eq(usuarios.email, data.email))
-    
-    console.log(user)
-    const edadUsuario = parseInt(data.edad)
-    console.log(data.edadUsuario)
+    const user = await db.select().from(users).where(eq(users.email, String(data.email)))
 
-    
-    if (user.length > 0) {
-      return fail(400, { user: true })
-    }
-    
-    
-    await db.insert(usuarios).values({ 
-      id: crypto.randomUUID(),
-      nombre: data.username,
-      email: data.email, 
-      rol: 'sdkfs',
-      contrasena: await bcrypt.hash(data.password, 10),
-      token: crypto.randomUUID(),
-      edad: data.edad
+    if ( user.length!==1 ) return fail(400, { user: "Upss, tuvimos problemas:Intenta de nuevo" })
+
+    const authenticatedUser = crypto.randomUUID();
+
+		cookies.set('session', authenticatedUser, {
+			// enviara la cookie en cada request
+			path: '/',
+			// vencimiento en 30 días
+			maxAge: 60 * 60 * 24 * 30
+		});
+
+    await db.update(users).set({
+      passwordHash: await bcrypt.hash(String(data.password), 10),
+      tokenAuth: authenticatedUser,
     })
-    
-    redirect(303, '/login')
+
+    redirect(303, '/')
   }
 }
-
-

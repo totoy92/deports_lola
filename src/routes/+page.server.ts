@@ -1,10 +1,11 @@
-import { db } from '$lib/server/database/index'
-import { users, inscripciones } from '$lib/server/database/schema'
+import type { User } from "$lib/server/database/schema";
+import { redirect } from "@sveltejs/kit";
 
-export const load = async () => {
-  const user = await db.select().from(users)
-  const insc = await db.select().from(inscripciones)
-  console.log(user)
-  console.log(insc)
-  return { user, insc }
+
+export function load({locals} : {locals: {user: User}}){
+
+    if(!locals.user){
+         redirect(307,'/login')
+    }
+
 }

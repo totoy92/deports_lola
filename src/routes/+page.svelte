@@ -1,10 +1,10 @@
 <script>
-	import { goto } from "$app/navigation";
-
-
+	import Salir from '$lib/imagenes/Salir.svelte';
+	import Menu from '$lib/components/Menu.svelte';
 </script>
+<Menu />
+<form action="/logout?/salir" method="post" class="flex justify-end m-5 text-red-400">
+	<button><Salir /> <span class="text-sm">Salir</span></button>
+</form>
 
-<h1 class="prose">Welcome to SvelteKit</h1>
-<p class="prose">Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-
-<button onclick={()=>goto('/')}>Ir a</button>
+<h1 class="text-5xl text-center my-auto mx-auto">Bienvenido</h1>

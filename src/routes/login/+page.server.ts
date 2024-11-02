@@ -1,30 +1,31 @@
+import { credentials } from '$lib/types/appTypes';
 import type { Cookies } from '@sveltejs/kit';
 import { fail, redirect } from '@sveltejs/kit';
 import bcrypt from 'bcrypt';
 
-import { db } from '$lib/server/database/client';
-import { usuarios } from '$lib/server/database/tables';
+import { db } from '$lib/server/database/index';
+import { users } from '$lib/server/database/schema';
 import { eq } from 'drizzle-orm';
 
-export const load = async () => {};
+export const load = async ({locals}) => {
+  if(locals.user) redirect(302, '/');
+};
 
 export const actions = {
 	login: async ({ request, cookies }: { request: Request; cookies: Cookies }) => {
 		const data = Object.fromEntries(await request.formData());
-		const password = String(data.password);
-
-		if (
-			typeof data.email !== 'string' ||
-			typeof data.password !== 'string' ||
-			!data.email ||
-			!data.password
-		) {
-			return fail(400, { invalid: true });
+		const validate = credentials.safeParse(data);
+		if (!validate.success) {
+			return fail(400, { mensaje: validate.error.errors[0].message });
 		}
 
-		const user = await db.select().from(usuarios).where(eq(usuarios.email, data.email));
+		const user = await db
+			.select()
+			.from(users)
+			.where(eq(users.email, String(data.email)));
 
-		if (!user || user.length === 0 || !user[0].contrasena) {
+
+		if (!user || user.length === 0 ) {
 			return fail(400, { credentials: true });
 		}
 
@@ -32,7 +33,9 @@ export const actions = {
 			return fail(400, { duplicate: true });
 		}
 
-		const findpass = await bcrypt.compare(password, user[0].contrasena);
+		if(user[0].passwordHash === null) redirect(302, '/registro');
+
+		const findpass = await bcrypt.compare(String(data.password), user[0].passwordHash);
 
 		if (!findpass) {
 			return fail(400, { credentials: true });
@@ -41,9 +44,9 @@ export const actions = {
 		const authenticatedUser = crypto.randomUUID();
 
 		await db
-			.update(usuarios)
-			.set({ token: authenticatedUser })
-			.where(eq(usuarios.email, data.email));
+			.update(users)
+			.set({ tokenAuth: authenticatedUser })
+			.where(eq(users.email, String(data.email)));
 
 		cookies.set('session', authenticatedUser, {
 			// enviara la cookie en cada request

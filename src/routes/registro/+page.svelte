@@ -8,16 +8,6 @@
 		<h1>Registro</h1>
 
 		<div>
-			<label for="username">Escribe tu nombre</label>
-			<input id="username" name="username" type="text" autocomplete="off" required />
-		</div>
-
-		<div>
-			<label for="edad">Escribe tu edad</label>
-			<input id="edad" name="edad" type="number" style="width: 60px;"  required />
-		</div>
-
-		<div>
 			<label for="email">Escribe tu email</label>
 			<input id="email" name="email" type="email" required />
 		</div>
@@ -27,9 +17,18 @@
 			<input id="password" name="password" type="password" required />
 		</div>
 
+		<div>
+			<label for="password1">Confirma Password</label>
+			<input id="password1" name="password1" type="password" required />
+		</div>
+
 		{#if form?.user}
-			<p class="error">Y existe el correo</p>
+			<p class="error">{form.user}</p>
 		{/if}
+
+		{#if form?.mensaje}
+		    <p class="error">{form.mensaje}</p>
+        {/if}
 
 		<button type="submit">Registrarse</button>
 	</form>
@@ -89,7 +88,7 @@
 	}
 
 	/*   .error {
-    color: #ff6b6b; /* Color rojo para mensajes de error 
-  } 
+    color: #ff6b6b; /* Color rojo para mensajes de error
+  }
 */
 </style>

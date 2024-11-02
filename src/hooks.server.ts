@@ -1,9 +1,10 @@
-import { db } from '$lib/server/database/client'
-import { usuarios } from '$lib/server/database/tables'
+import type { Handle } from '@sveltejs/kit'
+import { db } from '$lib/server/database/index'
+import { users  } from '$lib/server/database/schema'
 import { eq } from 'drizzle-orm'
 
 
-export const handle = async ({ event, resolve }) => {
+export const handle: Handle = async ({ event, resolve }) => {
 
     const session = event.cookies.get('session')
 
@@ -12,7 +13,7 @@ export const handle = async ({ event, resolve }) => {
         return await resolve(event)
     }
 
-    const user = await db.select().from(usuarios).where(eq(usuarios.token, session));
+    const user = await db.select().from(users).where(eq(users.tokenAuth, session));
 
     if (!user || user.length === 0) {
         // if the session is invalid, remove the cookie and load page as normal
@@ -21,7 +22,7 @@ export const handle = async ({ event, resolve }) => {
             expires: new Date(0),
           }
         )
-        return await resolve(event)    
+        return await resolve(event)
     }
 
     event.locals.user = user[0]
