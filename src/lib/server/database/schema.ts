@@ -66,7 +66,9 @@ export const usuariosATemasRelacion = relations(usuariostemas, ({ one }) => ({
 export const articulos = sqliteTable('articulos', {
 	id: int().primaryKey({ autoIncrement: true }),
 	noticia: text().notNull(),
+	titular: text(),
 	fecha: int().notNull(),
+	fechaEdicion: int(),
 	idUsuario: int()
 		.notNull()
 		.references(() => users.id),

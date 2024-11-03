@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "4cb0a453-9aa8-44f6-92d3-040b22faf815",
+  "id": "6569af6b-044a-4b78-9440-cc090b9d7886",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "articulos": {
@@ -19,6 +19,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "titular": {
+          "name": "titular",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "fecha": {
@@ -130,7 +137,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": 1730429851823000
+          "default": 1730579831718000
         }
       },
       "indexes": {},
@@ -321,7 +328,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": 1730429851820000
+          "default": 1730579831712000
         },
         "password_hash": {
           "name": "password_hash",

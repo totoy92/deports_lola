@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c9a28aac-1d73-4721-9891-dabb9a7264c9",
-  "prevId": "4cb0a453-9aa8-44f6-92d3-040b22faf815",
+  "id": "4c206b7e-a3c5-40dd-8e4c-530ab1a28cf3",
+  "prevId": "6569af6b-044a-4b78-9440-cc090b9d7886",
   "tables": {
     "articulos": {
       "name": "articulos",
@@ -21,11 +21,25 @@
           "notNull": true,
           "autoincrement": false
         },
+        "titular": {
+          "name": "titular",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "fecha": {
           "name": "fecha",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "fecha_edicion": {
+          "name": "fecha_edicion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "id_usuario": {
@@ -130,7 +144,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": 1730471404260000
+          "default": 1730586710370000
         }
       },
       "indexes": {},
@@ -321,7 +335,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": 1730471404258000
+          "default": 1730586710367000
         },
         "password_hash": {
           "name": "password_hash",

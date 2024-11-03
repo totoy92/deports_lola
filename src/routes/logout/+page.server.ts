@@ -15,7 +15,8 @@ export const actions = {
 			expires: new Date(0)
 		});
 
-		// redirect the user
+		/* redirect the user
 		redirect(302, '/login');
+		*/
 	}
 };

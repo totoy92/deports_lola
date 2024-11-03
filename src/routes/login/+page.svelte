@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ActionData } from "./$types";
-
+	import Salir from "$lib/imagenes/Salir.svelte"
 	let { form }: { form:ActionData } = $props();
 
 </script>
@@ -28,6 +28,7 @@
 		{/if}
 
 		<button type="submit">Register</button>
+		<a href="/" class="text-red-400"> <Salir /></a>
 	</form>
 </div>
 
