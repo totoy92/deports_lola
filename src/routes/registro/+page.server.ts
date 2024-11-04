@@ -40,7 +40,7 @@ export const actions = {
     await db.update(users).set({
       passwordHash: await bcrypt.hash(String(data.password), 10),
       tokenAuth: authenticatedUser,
-    })
+    }).where(eq(users.email, String(data.email)))
 
     redirect(303, '/')
   }

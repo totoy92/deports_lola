@@ -10,9 +10,3 @@ export const load = async ({locals}:{locals:{user:User}})=>{
     posts
   }
 }
-
-export const actions = {
-	nada: async ({ request }: { request: Request}) => {
-	  console.log('jovnay velez arango');
-	}
-};

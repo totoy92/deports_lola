@@ -1,10 +1,22 @@
 <script lang="ts">
 	import type { User } from '$lib/server/database/schema.js';
+	import DOMPurify from 'dompurify';
+
 	import { marked } from 'marked';
 
 	let { data }: { data: { user: User; articulo?: { id: number; noticia: string } } } = $props();
 
 	let miArticulo = $state(data.articulo?.noticia || '');
+
+	let miHtml = $derived( marked(miArticulo));
+
+	let sanitizeContent = $state('');
+
+	$effect(() => {
+		(async () => {
+			sanitizeContent = DOMPurify.sanitize(await miHtml);
+		})();
+	});
 </script>
 
 <div class="mx-auto my-5 flex w-max flex-col">
@@ -20,5 +32,5 @@
 </div>
 
 <div class="prose">
-	{@html marked(miArticulo)}
+	{@html sanitizeContent}
 </div>
