@@ -7,6 +7,13 @@ export async function temas() {
 	return secciones;
 }
 
+export async function nombreTemas() {
+  const temas = await db.query.temas.findMany({
+    columns: { id: true, tema: true }
+  });
+  return temas;
+}
+
 export async function articuloPorId(articuloId: number) {
   const articulo = await db.query.articulos.findFirst({
     columns: { id: true, noticia: true },

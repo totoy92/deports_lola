@@ -1,7 +1,7 @@
 <script>
 	// importamos las props para ingreso o salida de la app
 
-	let { estado } = $props();
+	let { estado, admin = false } = $props();
 
 	// Estado para controlar la visibilidad del menú móvil
 	import Laptop from '$lib/imagenes/laptop.png';
@@ -10,6 +10,8 @@
 	import { slide } from 'svelte/transition';
 	let isMenuOpen = $state(false);
 
+	// Nuevo estado para el dropdown
+	let isDropdownOpen = $state(false);
 	// Función para alternar el menú móvil
 	const toggleMenu = () => {
 		isMenuOpen = !isMenuOpen;
@@ -19,18 +21,27 @@
 	const closeMenu = () => {
 		isMenuOpen = false;
 	};
+
+	// Nueva función para manejar clics fuera del dropdown
+	function handleClickOutside(event) {
+		if (!event.target.closest('.dropdown')) {
+			isDropdownOpen = false;
+		}
+	}
 </script>
+
+<svelte:window on:click={handleClickOutside} />
 
 {#snippet ingreso()}
 	{#if estado === 'ingreso'}
-		<a href="/login" class="text-green-500 ml-1">
+		<a href="/login" class="ml-1 text-green-500">
 			<Entrar /><span class="text-sm">Entrar</span>
 		</a>
 	{/if}
 	{#if estado === 'salida'}
 		<form action="/logout?/salir" method="post" class="m-5 flex justify-end text-red-400">
 			<button>
-			     <Salir /><span class="text-sm ml-1">Salir</span>
+				<Salir /><span class="ml-1 text-sm">Salir</span>
 			</button>
 		</form>
 	{/if}
@@ -47,32 +58,73 @@
 
 		<!-- Menú principal centrado - visible en desktop -->
 		<div class="hidden flex-1 justify-center space-x-6 md:flex">
-			<a
-				href="/"
-				onclick={closeMenu}
-				class="rounded-md px-3 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-gray-700 hover:text-gray-300"
-			>
-				Inicio
-			</a>
-			<a
-				href="/articulos"
-				onclick={closeMenu}
-				class="rounded-md px-3 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-gray-700 hover:text-gray-300"
-			>
-				Noticias Deportivas
-			</a>
-			<a
-				href="/inscripciones"
-				onclick={closeMenu}
-				class="rounded-md px-3 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-gray-700 hover:text-gray-300"
-			>
-				Inscripciones
-			</a>
+			<div class="hidden flex-1 justify-center space-x-6 md:flex">
+				<a
+					href="/"
+					onclick={closeMenu}
+					class="rounded-md px-3 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-gray-700 hover:text-gray-300"
+				>
+					Inicio
+				</a>
+				<a
+					href="/articulos"
+					onclick={closeMenu}
+					class="rounded-md px-3 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-gray-700 hover:text-gray-300"
+				>
+					Noticias Deportivas
+				</a>
+
+				<a
+					href="/inscripciones"
+					onclick={closeMenu}
+					class="rounded-md px-3 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-gray-700 hover:text-gray-300"
+				>
+					Inscripciones
+				</a>
+
+				<!-- Nuevo menú dropdown -->
+				{#if admin}
+					<div class="dropdown relative inline-block">
+						<button
+							onclick={() => (isDropdownOpen = !isDropdownOpen)}
+							class="rounded-md px-3 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-gray-700 hover:text-gray-300"
+						>
+							Articuloss
+						</button>
+
+						{#if isDropdownOpen}
+							<div
+								transition:slide={{ duration: 200 }}
+								class="absolute left-0 z-50 mt-2 w-48 rounded-md bg-gray-800 py-1 shadow-lg"
+							>
+								<a
+									href="/noticias/crear"
+									class="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+								>
+									Crear
+								</a>
+								<a
+									href="/noticias/editar"
+									class="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+								>
+									Editar
+								</a>
+								<a
+									href="/articulos/eliminar"
+									class="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+								>
+									Eliminar
+								</a>
+							</div>
+						{/if}
+					</div>
+				{/if}
+			</div>
 		</div>
 
 		<!-- Botón Admin -->
 		<div class="flex-shrink-0">
-		  {@render ingreso()}
+			{@render ingreso()}
 		</div>
 
 		<!-- Botón menú móvil -->
@@ -92,34 +144,70 @@
 				</svg>
 			</button>
 		</div>
-	</div>
 
-	<!-- Menú móvil -->
-	{#if isMenuOpen}
-		<div class="mt-2 transition-all duration-300 ease-in-out md:hidden" transition:slide>
-			<div class="flex flex-col space-y-2">
-				<a
-					href="/"
-					onclick={closeMenu}
-					class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-300"
-				>
-					Inicio
-				</a>
-				<a
-					href="/articulos"
-					onclick={closeMenu}
-					class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-300"
-				>
-					Noti Deportes
-				</a>
-				<a
-					href="/inscripciones"
-					onclick={closeMenu}
-					class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-300"
-				>
-					Inscripciones
-				</a>
+		<!-- Menú móvil -->
+		{#if isMenuOpen}
+			<div class="mt-2 transition-all duration-300 ease-in-out md:hidden" transition:slide>
+				<div class="flex flex-col space-y-2">
+					<a
+						href="/"
+						onclick={closeMenu}
+						class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-300"
+					>
+						Inicio
+					</a>
+					<a
+						href="/articulos"
+						onclick={closeMenu}
+						class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-300"
+					>
+						Noti Deportes
+					</a>
+					<a
+						href="/inscripciones"
+						onclick={closeMenu}
+						class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-gray-700 hover:text-gray-300"
+					>
+						Inscripciones
+					</a>
+					{#if admin}
+						<div class="dropdown relative">
+							<button
+								onclick={() => (isDropdownOpen = !isDropdownOpen)}
+								class="w-full rounded-md px-3 py-2 text-left text-sm font-medium text-white hover:bg-gray-700"
+							>
+								Articulos
+							</button>
+
+							{#if isDropdownOpen}
+								<div transition:slide={{ duration: 200 }} class="space-y-2 pl-6">
+									<a
+										href="/noticias/crear"
+										class="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+										onclick={closeMenu}
+									>
+										Crear
+									</a>
+									<a
+										href="/noticias/editar"
+										class="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+										onclick={closeMenu}
+									>
+										Editar
+									</a>
+									<a
+										href="/articulos/eliminar"
+										class="block px-4 py-2 text-sm text-white hover:bg-gray-700"
+										onclick={closeMenu}
+									>
+										Eliminar
+									</a>
+								</div>
+							{/if}
+						</div>
+					{/if}
+				</div>
 			</div>
-		</div>
-	{/if}
+		{/if}
+	</div>
 </nav>

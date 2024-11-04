@@ -4,13 +4,19 @@ import { eq } from "drizzle-orm";
 
 
 
-export async function crearArticulo(article:string) {
-  await db.insert(articulos).values(
+export async function crearArticulo(article:string, idTema:number, idUsuario:number, titulo:string) {
+
+  console.log(article, idTema, idUsuario, titulo)
+
+  const articulo = await db.insert(articulos).values(
     {
       noticia: article,
-      idTema: 1,
-      idUsuario: 1,
+      titular: titulo,
+      idTema: idTema,
+      idUsuario: idUsuario,
       fecha: new Date()
     }
-  );
+  ).returning();
+
+  console.log(articulo)
 }
