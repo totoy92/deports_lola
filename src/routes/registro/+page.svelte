@@ -41,6 +41,12 @@
 		min-height: 100vh;
 	}
 
+	background {
+
+		background-image: ;
+
+	}
+
 	h1 {
 		color: #d3d3d3; /* Color de texto gris claro */
 		margin-bottom: 1rem; /* Espaciado inferior */
@@ -87,7 +93,7 @@
 		background-color: #6a6a6a; /* Un tono más claro al pasar el cursor */
 	}
 
-	/*   .error {
+	/*  .error {
     color: #ff6b6b; /* Color rojo para mensajes de error
   }
 */

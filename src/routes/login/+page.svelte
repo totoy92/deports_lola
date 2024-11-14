@@ -2,12 +2,13 @@
 	import type { ActionData } from "./$types";
 	import Salir from "$lib/imagenes/Salir.svelte"
 	let { form }: { form:ActionData } = $props();
-
 </script>
 
 <div class="grid mx-3">
 	<form action="?/login" method="POST">
-		<h1>Registro</h1>
+      
+
+		<h1>Iniciar sesion</h1>
 
 		<div>
 			<label for="email">Escribe tu email</label>
