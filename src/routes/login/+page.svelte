@@ -1,4 +1,5 @@
 <script lang="ts">
+	
 	import type { ActionData } from "./$types";
 	import Salir from "$lib/imagenes/Salir.svelte"
 	let { form }: { form:ActionData } = $props();
@@ -27,9 +28,11 @@
 		{#if form?.credentials}
 			<p class="error">Usuario o contraseña invalido</p>
 		{/if}
+    
+		<button type="submit">Iniciar</button>
 
-		<button type="submit">Register</button>
 		<a href="/" class="text-red-400"> <Salir /></a>
+		
 	</form>
 </div>
 
@@ -58,6 +61,8 @@
 
 
 <style>
+
+	
 	.grid {
 		display: grid;
 		place-items: center;

@@ -41,11 +41,6 @@
 		min-height: 100vh;
 	}
 
-	background {
-
-		background-image: ;
-
-	}
 
 	h1 {
 		color: #d3d3d3; /* Color de texto gris claro */

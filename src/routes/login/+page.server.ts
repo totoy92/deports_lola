@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt';
 import { db } from '$lib/server/database/index';
 import { users } from '$lib/server/database/schema';
 import { eq } from 'drizzle-orm';
-
 export const load = async ({locals}) => {
   if(locals.user) redirect(302, '/');
 };
